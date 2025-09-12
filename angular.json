@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "mensajes": {
+    "mi-proyecto": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -19,10 +19,7 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/assets"
             ],
             "styles": [
               "src/styles.css"
@@ -56,10 +53,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "mensajes:build:production"
+              "buildTarget": "mi-proyecto:build:production"
             },
             "development": {
-              "buildTarget": "mensajes:build:development"
+              "buildTarget": "mi-proyecto:build:development"
             }
           },
           "defaultConfiguration": "development"
