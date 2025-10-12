@@ -1,32 +1,27 @@
 <catalogo>
   <producto>
     <id>1</id>
-    <nombre>Laptop</nombre>
-    <precio>15000</precio>
-    <descripcion>Una laptop de alto rendimiento</descripcion>
+    <nombre>Pan Integral</nombre>
+    <precio>20</precio>
+    <descripcion></descripcion>
   </producto> 
   <producto>
     <id>2</id>
-    <nombre>Mouse</nombre>
-    <precio>300</precio>
-    <descripcion>Mouse inalambrico</descripcion>
+    <nombre>Baguette</nombre>
+    <precio>30</precio>
+    <descripcion></descripcion>
   </producto>
   <producto>
     <id>3</id>
-    <nombre>Audifonos </nombre>
-    <precio>1300</precio>
-    <descripcion>Audifonos inalambricos</descripcion>
+    <nombre>Pan de caja </nombre>
+    <precio>25</precio>
+    <descripcion></descripcion>
   </producto>
   <producto>
     <id>4</id>
-    <nombre>Silla gamer </nombre>
-    <precio>3700</precio>
-    <descripcion>Silla gamer super comoda</descripcion>
+    <nombre>Croissant </nombre>
+    <precio>37</precio>
+    <descripcion></descripcion>
   </producto>
-  <producto>
-    <id>5</id>
-    <nombre>Teclado </nombre>
-    <precio>2300</precio>
-    <descripcion>Teclado alambrico con luces</descripcion>
-  </producto>
+  
 </catalogo>

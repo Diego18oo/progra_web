@@ -1,19 +1,11 @@
-<h1 class="text-2xl font-bold mb-4">Catálogo</h1>
+<h2>Catálogo de Productos</h2>
 
-<div class="grid grid-cols-2 gap-4">
-  @for (producto of productos; track producto.id) {
-    <div class="p-4 border rounded shadow">
-      <h3 class="font-semibold">{{ producto.nombre }}</h3>
-      <p>{{ producto.descripcion }}</p>
-      <p class="text-green-600 font-bold">{{ producto.precio | currency }}</p>
-      <button
-        class="mt-2 bg-green-500 text-white px-3 py-1 rounded"
-        (click)="agregar(producto)">
-        Agregar al carrito
-      </button>
-    </div>
-  }
+<div *ngIf="productos.length === 0">
+  <p>No hay productos disponibles.</p>
 </div>
 
-<hr class="my-6" />
-<app-carrito></app-carrito>
+<div *ngFor="let producto of productos" class="producto">
+  <h3>{{ producto.nombre }}</h3>
+  <p>{{ producto.descripcion }}</p>
+  <p><strong>Precio:</strong> {{ producto.precio | currency:'USD' }}</p>
+</div>

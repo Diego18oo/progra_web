@@ -1,32 +1,28 @@
-// src/app/componentes/catalogo/catalogo.component.ts
-import { Component, inject } from '@angular/core';
-import { CarritoService } from '../../servicios/carrito.service';
-import { ProductoService } from '../../servicios/producto.service';
-import { CarritoComponent } from '../carrito/carrito.component';
-import { Producto } from '../../modelos/producto';
-import { CommonModule } from '@angular/common'; 
+import { Component, OnInit } from '@angular/core';
+import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CatalogoService } from '../../servicios/catalogo.service';
 
 @Component({
   selector: 'app-catalogo',
-  standalone: true,
-  imports: [CarritoComponent, CommonModule],
+  standalone: true, // 👈 si tu componente es standalone (Angular 17+)
+  imports: [CommonModule, CurrencyPipe],
   templateUrl: './catalogo.component.html'
 })
-export class CatalogoComponent {
-  private carritoService = inject(CarritoService);
-  private productoService = inject(ProductoService);
+export class CatalogoComponent implements OnInit {
+  productos: any[] = [];
 
-  productos: Producto[] = [];
+  constructor(private catalogoService: CatalogoService) {}
 
-  constructor() {
-    this.cargarProductos();
-  }
-
-  async cargarProductos() {
-    this.productos = await this.productoService.getProductos();
-  }
-
-  agregar(producto: Producto) {
-    this.carritoService.agregar(producto);
+  ngOnInit(): void {
+    // Cuando se carga el componente, obtiene los productos del backend
+    this.catalogoService.obtenerProductos().subscribe({
+      next: (data) => {
+        this.productos = data;
+        console.log('Productos obtenidos:', this.productos);
+      },
+      error: (err) => {
+        console.error('Error al cargar productos:', err);
+      }
+    });
   }
 }

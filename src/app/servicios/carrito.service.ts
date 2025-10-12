@@ -4,7 +4,7 @@ import { Producto } from '../modelos/producto';
 @Injectable({ providedIn: 'root' })
 export class CarritoService {
   private productosSignal = signal<Producto[]>([]);
-  productos = this.productosSignal.asReadonly();
+  productos = this.productosSignal.asReadonly(); 
 
   agregar(producto: Producto) {
     this.productosSignal.update(lista => [...lista, producto]);
