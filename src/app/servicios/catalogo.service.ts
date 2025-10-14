@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CatalogoService {
-  private apiUrl = 'http://localhost:4000/api/catalogo'; // Puerto del backend
+  private apiUrl = 'http://localhost:4000/api/catalogo';
 
   constructor(private http: HttpClient) {}
 
