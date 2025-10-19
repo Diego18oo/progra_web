@@ -19,7 +19,7 @@ export class CarritoService {
   }
 
   total() {
-    return this.productosSignal().reduce((acc, p) => acc + p.precio, 0);
+    return this.productosSignal().reduce((acc, p) => acc + Number(p.precio), 0);
   }
 
   exportarXML() {

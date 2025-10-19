@@ -1,28 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { CatalogoService } from '../../servicios/catalogo.service';
+import { CarritoService } from '../../servicios/carrito.service';
 
 @Component({
   selector: 'app-catalogo',
-  standalone: true, 
+  standalone: true,
   imports: [CommonModule, CurrencyPipe],
   templateUrl: './catalogo.component.html',
   styleUrls: ['./catalogo.css']
 })
 export class CatalogoComponent implements OnInit {
-  productos: any[] = [];
+  private catalogoService = inject(CatalogoService);
+  private carritoService = inject(CarritoService);
 
-  constructor(private catalogoService: CatalogoService) {}
+  productos: any[] = [];
 
   ngOnInit(): void {
     this.catalogoService.obtenerProductos().subscribe({
-      next: (data) => {
-        this.productos = data;
-        console.log('Productos obtenidos:', this.productos);
-      },
-      error: (err) => {
-        console.error('Error al cargar productos:', err);
-      }
+      next: (data) => this.productos = data,
+      error: (err) => console.error('Error al cargar productos:', err)
     });
+  }
+
+  agregarAlCarrito(producto: any) {
+    this.carritoService.agregar(producto);
+    alert(`${producto.nombre} agregado al carrito 🛒`);
   }
 }
