@@ -41,7 +41,7 @@ export class CarritoComponent implements OnInit, AfterViewInit {
           purchase_units: [
             {
               amount: {
-                currency_code: 'USD',
+                currency_code: 'MXN',
                 value: this.total().toString()
               }
             }

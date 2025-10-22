@@ -1,7 +1,7 @@
 import db from '../config/db.js';
 
 export const obtenerProductos = (req, res) => {
-  const sql = 'SELECT * FROM productos';
+  const sql = 'SELECT * FROM producto';
 
   db.query(sql, (err, results) => {
     if (err) {
