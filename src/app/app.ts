@@ -10,6 +10,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
       <h1>🧀 Quesería de Mi Sin Ti</h1>
 
       <nav>
+        <a routerLink="/perfil" style="margin-right: 15px; text-decoration:none; color:#333;">Mi Cuenta</a>
         <a routerLink="/catalogo" style="margin-right: 15px; text-decoration:none; color:#333;">Catálogo</a>
         <a routerLink="/carrito" style="text-decoration:none; color:#333;">Carrito 🛒</a>
       </nav>

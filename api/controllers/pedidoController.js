@@ -4,7 +4,7 @@ export const crearPedido = (req, res) => {
   const { productos, total } = req.body;
   const id_usuario = 1; // Por ahora simula un usuario logueado
 
-  const sqlPedido = 'INSERT INTO pedidos (id_usuario, fecha_pedido, total, estado) VALUES (?, NOW(), ?, "pendiente")';
+  const sqlPedido = 'INSERT INTO pedido (id_usuario, fecha_pedido, total, estado) VALUES (?, NOW(), ?, "pendiente")';
 
   db.query(sqlPedido, [id_usuario, total], (err, resultado) => {
     if (err) return res.status(500).json({ error: 'Error al crear pedido' });

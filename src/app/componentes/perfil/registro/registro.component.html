@@ -1,0 +1,11 @@
+<div class="form-container">
+  <h2>Crear cuenta</h2>
+  <form (ngSubmit)="registrar()">
+    <input [(ngModel)]="usuario.nombre" name="nombre" placeholder="Nombre" required>
+    <input [(ngModel)]="usuario.correo" name="correo" placeholder="Correo" required>
+    <input [(ngModel)]="usuario.contrasena" name="contrasena" type="password" placeholder="Contraseña" required>
+    <input [(ngModel)]="usuario.direccion" name="direccion" placeholder="Dirección">
+    <input [(ngModel)]="usuario.telefono" name="telefono" placeholder="Teléfono">
+    <button type="submit">Registrar</button>
+  </form> 
+</div>

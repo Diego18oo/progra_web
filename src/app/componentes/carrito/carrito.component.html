@@ -5,7 +5,7 @@
     <p>Tu carrito está vacío.</p>
   } @else {
     <ul>
-      @for (producto of carrito(); track producto.id) {
+      @for (producto of carrito(); track $index) {
         <li>
           <div class="producto-info">
             <span>{{ producto.nombre }}</span>

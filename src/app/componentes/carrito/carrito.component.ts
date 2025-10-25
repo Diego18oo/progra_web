@@ -20,13 +20,20 @@ export class CarritoComponent implements OnInit, AfterViewInit {
   total = computed(() => Number(this.carritoService.total()));
 
   ngOnInit() {
+    const usuario = localStorage.getItem('usuario');
+    if (!usuario) {
+      alert('Por favor inicia sesión antes de realizar un pago.');
+      window.location.href = '/login';
+      return;
+    }
+    console.log(usuario);
     console.log('🛒 Carrito cargado:', this.carrito());
   }
 
   async ngAfterViewInit() {
     const paypal: PayPalNamespace | null = await loadScript({
       clientId: 'AXbjKFKHiwJjEKqQ2NmnX6MktGdYZmWBIdrCBvIu2FDh5W47zOAp3purOyAxvDt3vYvAy9FNMSGnX737',
-      currency: 'USD'
+      currency: 'MXN'
     });
 
     if (!paypal || typeof paypal.Buttons !== 'function') {
@@ -51,6 +58,14 @@ export class CarritoComponent implements OnInit, AfterViewInit {
       onApprove: async (data, actions) => {
         const detalles = await actions.order?.capture();
         console.log('✅ Pago completado:', detalles);
+        const usuario = JSON.parse(localStorage.getItem('usuario')!);
+  
+        const pedido = {
+          id_usuario: usuario.id_usuario,
+          productos: this.carrito(),
+          total: this.total(),
+          metodo_pago: 'PayPal'
+        };
 
         this.pedidoService.guardarPedido(this.carrito(), this.total()).subscribe({
           next: () => {
