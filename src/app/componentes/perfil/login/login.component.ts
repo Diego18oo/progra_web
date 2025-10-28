@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../servicios/auth.service';
-import { RouterModule } from '@angular/router';  // 👈 importa RouterModule
-
 
 @Component({
   selector: 'app-login',
@@ -11,7 +10,7 @@ import { RouterModule } from '@angular/router';  // 👈 importa RouterModule
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.component.html',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   credenciales = {
     correo: '',
     contrasena: ''
@@ -20,7 +19,16 @@ export class LoginComponent {
   usuario: any = null;
   pedidos: any[] = [];
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit() {
+    // Si el usuario ya está logueado, cargamos su info automáticamente
+    const usuarioGuardado = this.authService.getUsuarioLogueado();
+    if (usuarioGuardado) {
+      this.usuario = usuarioGuardado;
+      this.cargarPedidos();
+    }
+  }
 
   login() {
     this.authService.login(this.credenciales).subscribe({
@@ -40,5 +48,12 @@ export class LoginComponent {
         error: (err) => console.error('Error al cargar pedidos:', err)
       });
     }
+  }
+
+  logout() {
+    this.authService.logout();
+    this.usuario = null;
+    this.pedidos = [];
+    alert('Sesión cerrada correctamente');
   }
 }

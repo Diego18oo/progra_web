@@ -58,18 +58,11 @@ export class CarritoComponent implements OnInit, AfterViewInit {
       onApprove: async (data, actions) => {
         const detalles = await actions.order?.capture();
         console.log('✅ Pago completado:', detalles);
-        const usuario = JSON.parse(localStorage.getItem('usuario')!);
-  
-        const pedido = {
-          id_usuario: usuario.id_usuario,
-          productos: this.carrito(),
-          total: this.total(),
-          metodo_pago: 'PayPal'
-        };
+        console.log('Token actual:', localStorage.getItem('token'));
 
         this.pedidoService.guardarPedido(this.carrito(), this.total()).subscribe({
-          next: () => {
-            alert('Pedido registrado correctamente');
+          next: (res) => {
+            alert(`Pedido #${res.id_pedido} registrado correctamente`);
             this.carritoService.vaciar();
           },
           error: (err) => console.error('Error al registrar pedido:', err)

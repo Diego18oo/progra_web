@@ -42,6 +42,8 @@ export const loginUsuario = async (req, res) => {
     if (!match) return res.status(401).json({ error: 'Credenciales inválidas' });
 
     const token = jwt.sign({ id_usuario: user.id_usuario, correo: user.correo }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+    console.log('Token decodificado:', jwt.verify(token, JWT_SECRET));
+
 
     // No devolver la contrasena
     delete user.contrasena;

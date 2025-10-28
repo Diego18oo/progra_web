@@ -35,6 +35,9 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
   }
+  estaLogueado(): boolean {
+    return !!localStorage.getItem('token');
+  }
 
   getUsuarioLogueado() {
     const u = localStorage.getItem('usuario');
