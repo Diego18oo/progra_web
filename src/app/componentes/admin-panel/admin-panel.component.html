@@ -1,0 +1,17 @@
+<h2>Panel de Administración</h2>
+<form (ngSubmit)="crearProducto()" #productoForm="ngForm">
+
+  <label>Nombre:</label>
+  <input type="text" [(ngModel)]="producto.nombre" name="nombre" required>
+
+  <label>Descripción:</label>
+  <input type="text" [(ngModel)]="producto.descripcion" name="descripcion" required>
+
+  <label>Precio:</label>
+  <input type="number" [(ngModel)]="producto.precio" name="precio" required>
+
+  <label>URL de Imagen:</label>
+  <input type="text" [(ngModel)]="producto.url_imagen" name="url_imagen" required>
+
+  <button type="submit" [disabled]="!productoForm.valid">Guardar Producto</button>
+</form>

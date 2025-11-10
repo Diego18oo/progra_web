@@ -11,10 +11,10 @@ export class PedidoService {
 
   guardarPedido(productos: Producto[], total: number): Observable<any> {
     const token = localStorage.getItem('token') || '';
-    console.log("🔑 Token que se enviará:", token);
+    console.log("Token que se enviará:", token);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}` // ✅ enviamos el token al backend
+      Authorization: `Bearer ${token}` // enviamos el token al backend
     });
 
     return this.http.post(this.apiUrl, { productos, total }, { headers });

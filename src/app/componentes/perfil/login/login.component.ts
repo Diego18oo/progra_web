@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    // Si el usuario ya está logueado, cargamos su info automáticamente
+    // Si el usuario ya esta logueado, cargamos su info automaticamente
     const usuarioGuardado = this.authService.getUsuarioLogueado();
     if (usuarioGuardado) {
       this.usuario = usuarioGuardado;
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
         alert('Bienvenido, ' + this.usuario.nombre);
         this.cargarPedidos();
       },
-      error: (err) => console.error('Error al iniciar sesión:', err)
+      error: (err) => console.error('Error al iniciar sesion:', err)
     });
   }
 

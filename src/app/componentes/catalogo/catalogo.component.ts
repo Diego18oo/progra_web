@@ -25,6 +25,6 @@ export class CatalogoComponent implements OnInit {
 
   agregarAlCarrito(producto: any) {
     this.carritoService.agregar(producto);
-    alert(`${producto.nombre} agregado al carrito 🛒`);
+    alert(`${producto.nombre} agregado al carrito `);
   }
 }

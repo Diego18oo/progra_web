@@ -27,7 +27,7 @@ export class CarritoComponent implements OnInit, AfterViewInit {
       return;
     }
     console.log(usuario);
-    console.log('🛒 Carrito cargado:', this.carrito());
+    console.log('Carrito cargado:', this.carrito());
   }
 
   async ngAfterViewInit() {
@@ -37,7 +37,7 @@ export class CarritoComponent implements OnInit, AfterViewInit {
     });
 
     if (!paypal || typeof paypal.Buttons !== 'function') {
-      console.error('❌ No se pudo inicializar PayPal.');
+      console.error('No se pudo inicializar PayPal.');
       return;
     }
 
@@ -57,7 +57,7 @@ export class CarritoComponent implements OnInit, AfterViewInit {
       },
       onApprove: async (data, actions) => {
         const detalles = await actions.order?.capture();
-        console.log('✅ Pago completado:', detalles);
+        console.log('Pago completado:', detalles);
         console.log('Token actual:', localStorage.getItem('token'));
 
         this.pedidoService.guardarPedido(this.carrito(), this.total()).subscribe({
@@ -69,7 +69,7 @@ export class CarritoComponent implements OnInit, AfterViewInit {
         });
       },
       onError: (err) => {
-        console.error('⚠️ Error con PayPal:', err);
+        console.error('Error con PayPal:', err);
       }
     }).render('#paypal-button-container');
   }

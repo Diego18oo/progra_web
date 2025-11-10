@@ -24,7 +24,7 @@ export class RegistroComponent {
     console.log('Enviando al backend:', this.usuario);
     this.authService.registrar(this.usuario).subscribe({
       next: (res) => {
-        alert('✅ Usuario registrado correctamente');
+        alert('Usuario registrado correctamente');
       },
       error: (err) => {
         console.error('Error al registrar usuario:', err);
