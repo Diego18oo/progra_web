@@ -6,5 +6,4 @@ import { verificarAdmin } from '../middlewares/roleMiddleware.js';
 const router = express.Router();
 
 router.post('/', verifyToken, verificarAdmin, crearProducto);
-console.log('Rutas de productos cargadas');
 export default router;

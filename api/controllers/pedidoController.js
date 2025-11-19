@@ -23,7 +23,12 @@ export const crearPedido = async (req, res) => {
     console.log(" Nuevo id_pedido:", id_pedido);
 
     //  Preparar los detalles
-    const detalles = productos.map(p => [id_pedido, Number(p.id_producto), 1, Number(p.precio)]);
+    const detalles = productos.map(p => [
+      id_pedido,
+      Number(p.id_producto),
+      Number(p.cantidad || 1),
+      Number(p.precio) * Number(p.cantidad || 1)
+    ]);
     console.log(" Detalles a insertar:", detalles);
 
     //  Insertar los detalles del pedido
@@ -31,6 +36,15 @@ export const crearPedido = async (req, res) => {
       'INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, subtotal) VALUES ?',
       [detalles]
     );
+
+    for (const p of productos) {
+      await db.query(
+        'UPDATE producto SET stock = stock - ? WHERE id_producto = ? AND stock >= ?',
+        [Number(p.cantidad || 1), Number(p.id_producto), Number(p.cantidad || 1)]
+      );
+    }
+
+    
 
     console.log(" Detalles insertados correctamente");
     res.json({ mensaje: 'Pedido registrado correctamente', id_pedido });

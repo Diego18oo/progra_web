@@ -3,11 +3,25 @@ import { Producto } from '../modelos/producto';
 
 @Injectable({ providedIn: 'root' })
 export class CarritoService {
-  private productosSignal = signal<Producto[]>([]);
-  productos = this.productosSignal.asReadonly(); 
+
+  private productosSignal = signal<Array<Producto & { cantidad: number }>>([]);
+  productos = this.productosSignal.asReadonly();
 
   agregar(producto: Producto) {
-    this.productosSignal.update(lista => [...lista, producto]);
+    this.productosSignal.update(lista => {
+      const existente = lista.find(p => p.id === producto.id);
+
+      if (existente) {
+        return lista.map(p =>
+          p.id === producto.id
+            ? { ...p, cantidad: p.cantidad + 1 }
+            : p
+        );
+      }
+
+      // Si no existe, agregarlo con cantidad = 1
+      return [...lista, { ...producto, cantidad: 1 }];
+    });
   }
 
   quitar(id: number) {
@@ -19,7 +33,10 @@ export class CarritoService {
   }
 
   total() {
-    return this.productosSignal().reduce((acc, p) => acc + Number(p.precio), 0);
+    return this.productosSignal().reduce(
+      (acc, p) => acc + (Number(p.precio) * p.cantidad),
+      0
+    );
   }
 
   exportarXML() {
@@ -32,6 +49,7 @@ export class CarritoService {
       xml += `    <id>${p.id}</id>\n`;
       xml += `    <nombre>${p.nombre}</nombre>\n`;
       xml += `    <precio>${p.precio}</precio>\n`;
+      xml += `    <cantidad>${p.cantidad}</cantidad>\n`;
       if (p.descripcion) {
         xml += `    <descripcion>${p.descripcion}</descripcion>\n`;
       }

@@ -10,7 +10,7 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1d';
 export const registrarUsuario = async (req, res) => {
     console.log(" Body recibido en /registro:", req.body);
   try {
-    const { nombre, correo, contrasena, direccion, telefono, rol = 'cliente' } = req.body;
+    const { nombre, correo, contrasena, direccion, telefono } = req.body;
     if (!correo || !contrasena) return res.status(400).json({ error: 'Correo y contrasena requeridos' });
 
     // verifica que no haya un usuario previamente registrado con ese correo
@@ -22,7 +22,7 @@ export const registrarUsuario = async (req, res) => {
 
     //insertamos en bd al usuario
     const [result] = await pool.query(
-      'INSERT INTO usuario (nombre, correo, contrasena, direccion, telefono, rol) VALUES (?, ?, ?, ?, ?, ?)',
+      'INSERT INTO usuario (nombre, correo, contrasena, direccion, telefono) VALUES (?, ?, ?, ?, ?)',
       [nombre || null, correo, hashed, direccion || null, telefono || null]
     );
 
@@ -106,7 +106,7 @@ export const recuperarPassword = async (req, res) => {
     }
 
     // Generar contraseña temporal
-    const tempPassword = Math.random().toString(36).slice(-8); // Ejemplo: "a9fj4kdp"
+    const tempPassword = Math.random().toString(36).slice(-8); 
     const hash = await bcrypt.hash(tempPassword, 10);
 
     await pool.query('UPDATE usuario SET contrasena = ? WHERE correo = ?', [hash, correo]);

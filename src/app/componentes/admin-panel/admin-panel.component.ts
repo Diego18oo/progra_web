@@ -16,7 +16,8 @@ export class AdminPanelComponent {
     nombre: '',
     descripcion: '',
     precio: 0,
-    url_imagen: ''
+    url_imagen: '',
+    stock: 0
   };
 
   constructor(private http: HttpClient, private authService: AuthService) {}
@@ -29,7 +30,7 @@ export class AdminPanelComponent {
       .subscribe({
         next: () => {
           alert('Producto agregado correctamente');
-          this.producto = { nombre: '', descripcion: '', precio: 0, url_imagen: '' };
+          this.producto = { nombre: '', descripcion: '', precio: 0, url_imagen: '', stock: 0  };
         },
         error: (err) => {
           console.error('Error al crear producto:', err);

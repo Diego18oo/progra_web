@@ -10,6 +10,9 @@
     <img [src]="producto.url_imagen" alt="Imagen queso" class="img-gorda" />
     <p>{{ producto.descripcion }}</p>
     <p><strong>Precio:</strong> {{ producto.precio | currency:'USD' }}</p>
-    <button (click)="agregarAlCarrito(producto)">Agregar al carrito 🛒</button>
+    <p><strong>Stock:</strong> {{ producto.stock }}</p>
+    <button (click)="agregarAlCarrito(producto)" [disabled]="producto.stock <= 0">
+    {{ producto.stock > 0 ? 'Agregar al carrito 🛒' : 'Sin stock' }}
+    </button>
   </div>
 </div>
