@@ -58,7 +58,6 @@ export const loginUsuario = async (req, res) => {
     console.log('Token decodificado:', jwt.verify(token, JWT_SECRET));
 
 
-    // No devolver la contrasena
     delete user.contrasena;
 
     res.json({ mensaje: 'Login exitoso', token, usuario: user });
@@ -70,13 +69,11 @@ export const loginUsuario = async (req, res) => {
 
 export const obtenerPedidosUsuario = async (req, res) => {
   try {
-    const { id } = req.params; // id usuario
-    // Primero obtenemos los pedidos del usuario
+    const { id } = req.params; 
     const [pedidos] = await pool.query('SELECT * FROM pedido WHERE id_usuario = ? ORDER BY fecha_pedido DESC', [id]);
 
     if (pedidos.length === 0) return res.json([]);
 
-    // Obtener detalles para cada pedido 
     const pedidosConDetalles = [];
     for (const pedido of pedidos) {
       const [detalles] = await pool.query(
@@ -109,17 +106,14 @@ export const recuperarPassword = async (req, res) => {
       return res.status(404).json({ error: 'Correo no encontrado' });
     }
 
-    // Generar token seguro
     const token = crypto.randomBytes(32).toString('hex');
-    const expira = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos
+    const expira = new Date(Date.now() + 15 * 60 * 1000); 
 
-    // Guardar token en BD
     await pool.query(
       'UPDATE usuario SET reset_token = ?, reset_token_expira = ? WHERE correo = ?',
       [token, expira, correo]
     );
 
-    // Configurar transport de correo
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -137,7 +131,6 @@ export const recuperarPassword = async (req, res) => {
       <p>Este enlace expira en 15 minutos.</p>
     `;
     console.log("Enviando correo a:", correo);
-    // Enviar correo
     await transporter.sendMail({
       from: `"Soporte" <${process.env.EMAIL_USER}>`,
       to: correo,

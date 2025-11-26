@@ -37,7 +37,6 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    // Cargamos el usuario desde localStorage (si existe)
     this.usuario = this.authService.getUsuarioLogueado();
   }
 

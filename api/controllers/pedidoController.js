@@ -12,7 +12,6 @@ export const crearPedido = async (req, res) => {
       return res.status(401).json({ error: 'Usuario no autenticado' });
     }
 
-    //  Insertar el pedido
     const [resultado] = await db.query(
       'INSERT INTO pedido (id_usuario, fecha_pedido, total, estado) VALUES (?, NOW(), ?, "pendiente")',
       [id_usuario, total]
@@ -22,25 +21,34 @@ export const crearPedido = async (req, res) => {
     const id_pedido = resultado.insertId;
     console.log(" Nuevo id_pedido:", id_pedido);
 
-    //  Preparar los detalles
-    const detalles = productos.map(p => [
-      id_pedido,
-      Number(p.id_producto),
-      Number(p.cantidad || 1),
-      Number(p.precio) * Number(p.cantidad || 1)
-    ]);
+    const detalles = productos.map(p => {
+  const idProd = Number(p.id_producto || p.id);
+  const cantidad = Number(p.cantidad || 1);
+  const precio = Number(p.precio);
+
+  if (isNaN(idProd) || isNaN(cantidad) || isNaN(precio)) {
+    throw new Error("Datos inválidos en producto: " + JSON.stringify(p));
+  }
+
+  return [
+    id_pedido,
+    idProd,
+    cantidad,
+    precio * cantidad
+  ];
+});
     console.log(" Detalles a insertar:", detalles);
 
-    //  Insertar los detalles del pedido
     await db.query(
       'INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, subtotal) VALUES ?',
       [detalles]
     );
 
     for (const p of productos) {
+      const idProd = Number(p.id_producto || p.id);
       await db.query(
         'UPDATE producto SET stock = stock - ? WHERE id_producto = ? AND stock >= ?',
-        [Number(p.cantidad || 1), Number(p.id_producto), Number(p.cantidad || 1)]
+        [Number(p.cantidad || 1), idProd, Number(p.cantidad || 1)]
       );
     }
 
@@ -50,7 +58,7 @@ export const crearPedido = async (req, res) => {
     res.json({ mensaje: 'Pedido registrado correctamente', id_pedido });
 
   } catch (err) {
-    console.error(" Error al crear pedido:", err);
-    res.status(500).json({ error: 'Error al registrar pedido', detalle: err });
+    console.error("ERROR REAL DEL SERVIDOR:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };

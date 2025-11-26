@@ -14,7 +14,7 @@ export class PedidoService {
     console.log("Token que se enviará:", token);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}` // enviamos el token al backend
+      Authorization: `Bearer ${token}` 
     });
 
     return this.http.post(this.apiUrl, { productos, total }, { headers });

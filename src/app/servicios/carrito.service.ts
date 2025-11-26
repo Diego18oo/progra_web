@@ -11,7 +11,6 @@ export class CarritoService {
     this.productosSignal.update(lista => {
       const existente = lista.find(p => p.id === producto.id);
 
-      // Si ya existe en el carrito
       if (existente) {
         if (existente.cantidad >= producto.stock) {
           alert("No puedes agregar más, no hay suficiente stock.");
@@ -25,7 +24,6 @@ export class CarritoService {
         );
       }
 
-      // Si no existe, agregarlo con cantidad = 1 (solo si hay stock)
       if (producto.stock <= 0) {
         alert("Este producto está agotado.");
         return lista;
@@ -87,7 +85,7 @@ export class CarritoService {
         if (p.id === id) {
           if (p.cantidad >= p.stock) {
             alert("Has alcanzado el límite de stock disponible.");
-            return p; // no aumenta
+            return p; 
           }
           return { ...p, cantidad: p.cantidad + 1 };
         }
@@ -104,7 +102,7 @@ export class CarritoService {
             ? { ...p, cantidad: Math.max(1, p.cantidad - 1) }
             : p
         )
-        .filter(p => p.cantidad > 0); // Nunca dejar cantidad en 0
+        .filter(p => p.cantidad > 0); 
     });
   }
 }

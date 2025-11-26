@@ -22,7 +22,6 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    // Si el usuario ya esta logueado, cargamos su info automaticamente
     const usuarioGuardado = this.authService.getUsuarioLogueado();
     if (usuarioGuardado) {
       this.usuario = usuarioGuardado;
