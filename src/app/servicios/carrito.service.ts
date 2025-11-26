@@ -11,7 +11,13 @@ export class CarritoService {
     this.productosSignal.update(lista => {
       const existente = lista.find(p => p.id === producto.id);
 
+      // Si ya existe en el carrito
       if (existente) {
+        if (existente.cantidad >= producto.stock) {
+          alert("No puedes agregar más, no hay suficiente stock.");
+          return lista;
+        }
+
         return lista.map(p =>
           p.id === producto.id
             ? { ...p, cantidad: p.cantidad + 1 }
@@ -19,7 +25,12 @@ export class CarritoService {
         );
       }
 
-      // Si no existe, agregarlo con cantidad = 1
+      // Si no existe, agregarlo con cantidad = 1 (solo si hay stock)
+      if (producto.stock <= 0) {
+        alert("Este producto está agotado.");
+        return lista;
+      }
+
       return [...lista, { ...producto, cantidad: 1 }];
     });
   }
@@ -68,5 +79,32 @@ export class CarritoService {
     a.click();
 
     URL.revokeObjectURL(url);
+  }
+
+  incrementar(id: number) {
+    this.productosSignal.update(lista =>
+      lista.map(p => {
+        if (p.id === id) {
+          if (p.cantidad >= p.stock) {
+            alert("Has alcanzado el límite de stock disponible.");
+            return p; // no aumenta
+          }
+          return { ...p, cantidad: p.cantidad + 1 };
+        }
+        return p;
+      })
+    );
+  }
+
+  decrementar(id: number) {
+    this.productosSignal.update(lista => {
+      return lista
+        .map(p =>
+          p.id === id
+            ? { ...p, cantidad: Math.max(1, p.cantidad - 1) }
+            : p
+        )
+        .filter(p => p.cantidad > 0); // Nunca dejar cantidad en 0
+    });
   }
 }

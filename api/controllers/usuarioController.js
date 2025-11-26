@@ -2,6 +2,10 @@ import pool from '../config/db.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
+
+
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -105,15 +109,77 @@ export const recuperarPassword = async (req, res) => {
       return res.status(404).json({ error: 'Correo no encontrado' });
     }
 
-    // Generar contraseña temporal
-    const tempPassword = Math.random().toString(36).slice(-8); 
-    const hash = await bcrypt.hash(tempPassword, 10);
+    // Generar token seguro
+    const token = crypto.randomBytes(32).toString('hex');
+    const expira = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos
 
-    await pool.query('UPDATE usuario SET contrasena = ? WHERE correo = ?', [hash, correo]);
+    // Guardar token en BD
+    await pool.query(
+      'UPDATE usuario SET reset_token = ?, reset_token_expira = ? WHERE correo = ?',
+      [token, expira, correo]
+    );
 
-    res.json({ mensaje: 'Contraseña restablecida correctamente', nuevaPassword: tempPassword });
+    // Configurar transport de correo
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      }
+    });
+
+    const resetUrl = `http://localhost:4200/restablecer-password?token=${token}`;
+
+    const mensajeHTML = `
+      <h2>Restablecer Contraseña</h2>
+      <p>Haz clic en el siguiente enlace para crear una nueva contraseña:</p>
+      <a href="${resetUrl}" target="_blank">${resetUrl}</a>
+      <p>Este enlace expira en 15 minutos.</p>
+    `;
+    console.log("Enviando correo a:", correo);
+    // Enviar correo
+    await transporter.sendMail({
+      from: `"Soporte" <${process.env.EMAIL_USER}>`,
+      to: correo,
+      subject: "Restablecer contraseña",
+      html: mensajeHTML
+    });
+
+    res.json({ mensaje: 'Contraseña restablecida correctamente, revisa tu correo.' });
+
+
+
   } catch (error) {
     console.error('Error en recuperarPassword:', error);
     res.status(500).json({ error: 'Error al recuperar contraseña' });
+  }
+};
+
+
+export const actualizarPassword = async (req, res) => {
+  try {
+    const { token, nuevaContrasena } = req.body;
+
+    const [rows] = await pool.query(
+      'SELECT * FROM usuario WHERE reset_token = ? AND reset_token_expira > NOW()',
+      [token]
+    );
+
+    if (rows.length === 0) {
+      return res.status(400).json({ error: 'Token inválido o expirado' });
+    }
+
+    const hash = await bcrypt.hash(nuevaContrasena, 10);
+
+    await pool.query(
+      'UPDATE usuario SET contrasena = ?, reset_token = NULL, reset_token_expira = NULL WHERE id_usuario = ?',
+      [hash, rows[0].id_usuario]
+    );
+
+    res.json({ mensaje: 'Contraseña actualizada correctamente' });
+
+  } catch (error) {
+    console.error('Error en actualizarPassword:', error);
+    res.status(500).json({ error: 'Error al actualizar contraseña' });
   }
 };

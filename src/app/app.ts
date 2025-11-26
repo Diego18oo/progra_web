@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './servicios/auth.service';
+import { FooterComponent } from './componentes/footer/footer.component'; 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, CommonModule],
+  imports: [RouterOutlet, RouterLink, CommonModule, FooterComponent],
   template: `
     <header style="display:flex; justify-content:space-between; align-items:center; background:#f3f3f3; padding:10px 20px;">
       <h1>🧀 Quesería de Mi Sin Ti</h1>
@@ -26,6 +27,7 @@ import { AuthService } from './servicios/auth.service';
 
     <main style="padding: 20px;">
       <router-outlet></router-outlet>
+      <app-footer></app-footer>
     </main>
   `,
 })

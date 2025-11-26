@@ -23,7 +23,8 @@ export class ProductoService {
         id: Number(item.getElementsByTagName('id')[0]?.textContent || 0),
         nombre: item.getElementsByTagName('nombre')[0]?.textContent || '',
         precio: Number(item.getElementsByTagName('precio')[0]?.textContent || 0),
-        descripcion: item.getElementsByTagName('descripcion')[0]?.textContent || ''
+        descripcion: item.getElementsByTagName('descripcion')[0]?.textContent || '',
+        stock: Number(item.getElementsByTagName('stock')[0]?.textContent || 0)
       });
     }
 

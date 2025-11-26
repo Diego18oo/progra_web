@@ -23,7 +23,7 @@ export class CarritoComponent implements OnInit, AfterViewInit {
     const usuario = localStorage.getItem('usuario');
     if (!usuario) {
       alert('Por favor inicia sesión antes de realizar un pago.');
-      window.location.href = '/login';
+      window.location.href = '/perfil';
       return;
     }
     console.log(usuario);
@@ -84,5 +84,13 @@ export class CarritoComponent implements OnInit, AfterViewInit {
 
   exportarXML() {
     this.carritoService.exportarXML();
+  }
+
+  incrementar(id: number) {
+    this.carritoService.incrementar(id);
+  }
+
+  decrementar(id: number) {
+    this.carritoService.decrementar(id);
   }
 }

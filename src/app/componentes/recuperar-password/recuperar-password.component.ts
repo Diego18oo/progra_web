@@ -7,26 +7,23 @@ import { HttpClient } from '@angular/common/http';
   selector: 'app-recuperar-password',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './recuperar-password.component.html',
+  templateUrl: './recuperar-password.component.html'
 })
 export class RecuperarPasswordComponent {
   correo = '';
-  nuevaPassword: string | null = null;
-  mensajeError = '';
+  mensaje = '';
+  error = '';
 
   constructor(private http: HttpClient) {}
 
-  recuperar() {
+  enviarCorreo() {
+    this.mensaje = '';
+    this.error = '';
+
     this.http.post('http://localhost:4000/api/usuarios/recuperar', { correo: this.correo })
       .subscribe({
-        next: (resp: any) => {
-          this.nuevaPassword = resp.nuevaPassword;
-          this.mensajeError = '';
-        },
-        error: (err) => {
-          console.error(err);
-          this.mensajeError = err.error?.error || 'Error al recuperar la contraseña';
-        }
+        next: (data: any) => this.mensaje = data.mensaje,
+        error: err => this.error = err.error?.error || 'Error desconocido'
       });
   }
 }

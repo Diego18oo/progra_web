@@ -10,6 +10,11 @@
           <div class="producto-info">
             <span>{{ producto.nombre }}</span>
             <p>{{ producto.precio | currency }}</p>
+            <div class="cantidad-controles">
+              <button (click)="decrementar(producto.id)">−</button>
+              <span>{{ producto.cantidad }}</span>
+              <button (click)="incrementar(producto.id)">+</button>
+            </div>
           </div>
           <button class="btn-rojo" (click)="quitar(producto.id)">Quitar</button>
         </li>
